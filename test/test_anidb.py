@@ -31,6 +31,12 @@ def pytest_funcarg__anidb_anime(request):
                 <title xml:lang="en">fooep</title>
             </episode>
         </episodes>
+        <tags>
+            <tag id="1" approval="20" spoiler="true">
+                <name>foo</name>
+                <count>10</count>
+            </tag>
+        </tags>
     </anime>
     """
     return query._handle_response(xml)
@@ -66,3 +72,12 @@ def test_dates(anidb_anime):
 def test_episodes(anidb_anime):
     assert len(anidb_anime.episodes) == 1
     assert 1 in anidb_anime.episodes.keys()
+
+def test_tags(anidb_anime):
+    assert len(anidb_anime.tags) == 1
+    t = anidb_anime.tags[0]
+    assert t.spoiler
+    assert t.id == 1
+    assert t.approval == 20
+    assert t.name == "foo"
+    assert t.count == 10

@@ -51,12 +51,11 @@ class Typed(object):
     def type(self, value):
         self._type = value
 
-class NamedEntity(Entity):
+class Named(object):
     """
     Base class for all classes with a `name` attribute
     """
-    def __init__(self, id):
-        Entity.__init__(self, id)
+    def __init__(self):
         self.name = None
 
     @property
@@ -68,7 +67,23 @@ class NamedEntity(Entity):
     def name(self, value):
         self._name = value
 
-class Anime(Entity, Titled, Typed):
+class Described(object):
+    """
+    Base class for all classes with a `description` attribute
+    """
+    def __init__(self):
+        self._description = None
+
+    @property
+    def description(self):
+        """The description property"""
+        return self._description
+
+    @description.setter
+    def description(self, value):
+        self._description = value
+
+class Anime(Entity, Titled, Typed, Described):
     """
     An anime. Identified by an `aid`
     """
@@ -76,12 +91,14 @@ class Anime(Entity, Titled, Typed):
         Entity.__init__(self, aid)
         Titled.__init__(self)
         Typed.__init__(self)
+        Described.__init__(self)
         self._type = None
         self._episodecount = None
         self._episodes = {}
         self._startdate = None
         self._enddate = None
         self._categories = []
+        self._tags = []
         self._ratings = {
                     "permanent":
                     { "count": None, "rating": None},
@@ -129,6 +146,14 @@ class Anime(Entity, Titled, Typed):
         else:
             raise ValueError("Unknown kind of rating")
 
+    def add_tag(self, tag):
+        """
+        Adds a tag to this anime
+
+        :param tag: A :class:`anidb.model.Tag`
+        """
+        self._tags.append(tag)
+
     @property
     def episodecount(self):
         """The episodecount property"""
@@ -157,15 +182,6 @@ class Anime(Entity, Titled, Typed):
         self._enddate = value
 
     @property
-    def description(self):
-        """The description property"""
-        return self._description
-
-    @description.setter
-    def description(self, value):
-        self._description = value
-
-    @property
     def ratings(self):
         """The ratings property"""
         return self._ratings
@@ -180,6 +196,10 @@ class Anime(Entity, Titled, Typed):
         """The categories property"""
         return self._categories
 
+    @property
+    def tags(self):
+        """The tags property"""
+        return self._tags
 
 class Episode(Entity, Titled):
     """
@@ -224,12 +244,14 @@ class Episode(Entity, Titled):
     def length(self, value):
         self._length = value
 
-class Category(NamedEntity):
+class Category(Entity, Named, Described):
     """
     An AniDB category
     """
     def __init__(self, id):
         Entity.__init__(self, id)
+        Named.__init__(self)
+        Described.__init__(self)
         self._hentai = False
         self._weight = 0
         self._name = None
@@ -258,17 +280,6 @@ class Category(NamedEntity):
     @weight.setter
     def weight(self, value):
         self._weight = value
-
-    @property
-    def description(self):
-        """The description of this category"""
-        return self._description
-
-    @description.setter
-    def description(self, value):
-        if not isinstance(value, basestring):
-            raise TypeError("Basestring expected")
-        self._description = value
 
     @property
     def parentid(self):
@@ -321,3 +332,39 @@ class Title(Typed):
     @exact.setter
     def exact(self, value):
         self._exact = value
+
+class Tag(Entity, Named, Described):
+    def __init__(self, id):
+        Entity.__init__(self, id)
+        Named.__init__(self)
+        Described.__init__(self)
+        self._spoiler = False
+        self._approval = None
+        self._count = None
+
+    @property
+    def count(self):
+        """The count property"""
+        return self._count
+
+    @count.setter
+    def count(self, value):
+        self._count = int(value)
+
+    @property
+    def spoiler(self):
+        """The spoiler property"""
+        return self._spoiler
+
+    @spoiler.setter
+    def spoiler(self, value):
+        self._spoiler = value
+
+    @property
+    def approval(self):
+        """The approval property"""
+        return self._approval
+
+    @approval.setter
+    def approval(self, value):
+        self._approval = int(value)

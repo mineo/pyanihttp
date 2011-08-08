@@ -1,5 +1,5 @@
 # coding: utf-8
-# TODO parse tags, characters
+# TODO parse characters
 import xml.etree.ElementTree as ET
 import requests
 import StringIO
@@ -145,6 +145,9 @@ def parse_anime(anime):
         elif elem.tag == "episodes":
             for e in elem:
                 result.add_episode(parse_episode(e))
+        elif elem.tag == "tags":
+            for tag in parse_tags(elem):
+                result.add_tag(tag)
     return result
 
 def parse_categorylist(categorylist):
@@ -202,4 +205,22 @@ def parse_title(elem):
         t.type = elem.attrib["type"]
     if "exact" in elem.attrib:
         t.exact = True
+    return t
+
+def parse_tags(elem):
+    for t in elem:
+        yield parse_tag(t)
+
+def parse_tag(elem):
+    t = model.Tag(elem.attrib["id"])
+    t.approval = elem.attrib["approval"]
+    if elem.attrib["spoiler"].lower() == "true":
+        t.spoiler = True
+    for e in elem:
+        if e.tag == "description":
+            t.description = e.text
+        elif e.tag == "name":
+            t.name = e.text
+        elif e.tag == "count":
+            t.count = e.text
     return t
