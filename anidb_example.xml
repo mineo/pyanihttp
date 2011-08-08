@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<anime id="1" restricted="false">
+   <type>TV Series</type>
+   <episodecount>13</episodecount>
+   <startdate>1999-01-04</startdate>
+   <enddate>1999-03-29</enddate>
+   <titles>
+      <title xml:lang="x-jat" type="main">Seikai no Monshou</title>
+      <title xml:lang="zh-Hans" type="syn">星界之纹章</title>
+      <title xml:lang="en" type="short">CotS</title>
+      <title xml:lang="x-jat" type="short">SnM</title>
+      <title xml:lang="ja" type="official">星界の紋章</title>
+      <title xml:lang="en" type="official">Crest of the Stars</title>
+      <title xml:lang="fr" type="official">Crest of the Stars</title>
+      <title xml:lang="pl" type="official">Crest of the Stars</title>
+   </titles>
+   <relatedanime>
+      <anime id="4" type="Sequel">Seikai no Senki</anime>
+      <anime id="6" type="Prequel">Seikai no Danshou</anime>
+      <anime id="1623" type="Summary">Seikai no Monshou Tokubetsuhen</anime>
+   </relatedanime>
+   <url>http://www.sunrise-inc.co.jp/seikai/</url>
+   <creators>
+      <name id="4495" type="Original Work">Morioka Hiroyuki</name>
+   </creators>
+   <description>Jinto Lin`s life changes forever when the Humankind Empire Abh takes over his home planet of Martine without firing a single shot. He is soon sent off to study the Abh language and culture and to prepare himself for his future as a nobleman — a future he never dreamed of. Or wanted.Now, Jinto is entering the next phase of his training, and he is about to meet his first Abh, the lovely Lafiel. But Jinto is about to learn that she is more than she appears to be. And together they will have to fight for their very lives.</description>
+   <ratings>
+      <permanent count="2953">8.53</permanent>
+      <temporary count="96">7.58</temporary>
+      <review count="11">8.75</review>
+   </ratings>
+   <picture>440.jpg</picture>
+   <categories>
+      <category id="174" parentid="8" hentai="false" weight="500">
+         <name>Space Travel</name>
+         <description>Space Travel usually refers going to space or travelling there with or without a spacecraft. There are different forms of space travel like Interplanetary travel, Interstellar travel or Intergalactic travel. Since it isn`t possible to travel faster than light, most anime series involve some sort "sub-space travel mechanism" as a way to travel faster than light.</description>
+      </category>
+      <category id="274" parentid="268" hentai="false" weight="400">
+         <name>Novel</name>
+         <description>Note that novel means book with words in paper, so no comics and no "visual novels", which should go under manga and dating-sim - visual Novel/erotic game respectively.
+
+Note that it can be applied to novels as we know them but also the typical light novels for teens and young adults, which are common in Japan and aside from being short include a number of illustrations. </description>
+      </category>
+   </categories>
+   <tags>
+      <tag id="136" approval="20" spoiler="false" update="2009-05-23">
+         <name>space opera</name>
+         <count>71</count>
+      </tag>
+      <tag id="175" approval="17" spoiler="false" update="2008-03-13">
+         <name>space elves</name>
+         <count>12</count>
+      </tag>
+      <tag id="389" approval="15" spoiler="false" update="2008-06-03">
+         <name>war setting</name>
+         <count>64</count>
+      </tag>
+      <tag id="393" approval="18" spoiler="false" update="2008-06-03">
+         <name>space battles</name>
+         <count>43</count>
+         <description>There are space battles in this anime. Usually between Earth forces and some alien invader, but ship to ship skirmishes in deep space are just as common.</description>
+      </tag>
+   </tags>
+   <characters>
+      <character id="7493" type="appears in" update="2009-05-28">
+         <name>Gosroth</name>
+         <description>The Resii Gothroth.The first Abh ship lost in the war.</description>
+         <episodes>1,1012</episodes>
+         <picture>26147.jpg</picture>
+      </character>
+      <character id="7501" type="appears in" update="2009-05-28">
+         <name>Planet Martine</name>
+         <description>The homeworld of Jinto</description>
+         <episodes>1</episodes>
+      </character>
+      <character id="7503" type="appears in" update="2009-05-28">
+         <name>Rock Lynn</name>
+         <description>The former president of Martine, later made count of the Hyde system, after striking a deal with the Abh (in episode 1)</description>
+         <episodes>1</episodes>
+         <picture>26165.jpg</picture>
+      </character>
+   </characters>
+   <episodes>
+      <episode id="1" update="2005-03-10">
+         <epno>1</epno>
+         <length>24</length>
+         <airdate>1999-01-03</airdate>
+         <rating votes="17">5.66</rating>
+         <title xml:lang="ja">侵略</title>
+         <title xml:lang="en">Invasion</title>
+         <title xml:lang="fr">Invasion</title>
+         <title xml:lang="x-jat">shinryaku</title>
+      </episode>
+      <episode id="2" update="2005-03-11">
+         <epno>2</epno>
+         <length>24</length>
+         <airdate>1999-01-10</airdate>
+         <rating votes="12">6.66</rating>
+         <title xml:lang="ja">星たちの眷族</title>
+         <title xml:lang="en">Kin of the Stars</title>
+         <title xml:lang="fr">Les parents des Étoiles</title>
+         <title xml:lang="x-jat">Hoshi-tachi no Kenzoku</title>
+      </episode>
+   </episodes>
+</anime>
