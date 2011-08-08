@@ -1,6 +1,5 @@
-#!/usr/bin/env pyhon2
 # coding: utf-8
-# TODO parse tags, characters, episodes
+# TODO parse tags, characters
 import xml.etree.ElementTree as ET
 import requests
 import StringIO

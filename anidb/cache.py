@@ -1,4 +1,3 @@
-#!/usr/bin/env python2
 import cPickle as pickle
 import datetime
 
@@ -25,8 +24,6 @@ def get(aid):
             return data["anime"]
     else:
         return None
-
-
 
 def save(aid, anime):
     if not isdir(CACHEDIR):
