@@ -4,7 +4,7 @@ import datetime
 from os.path import join, isfile, isdir
 from os import mkdir
 
-__all__ = ("get", "save")
+__all__ = ["get", "save"]
 
 CACHEDIR = "/tmp/pyanihttp.cache"
 

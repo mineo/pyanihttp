@@ -1,6 +1,6 @@
 import types
 
-__all__ = ["Anime", "Category", "Title", "Episode"]
+__all__ = ["Anime", "Category", "Title", "Episode", "Tag"]
 
 class Entity(object):
     def __init__(self, id):
