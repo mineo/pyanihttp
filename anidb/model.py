@@ -224,7 +224,7 @@ class Episode(Entity, Titled):
 
     @epno.setter
     def epno(self, value):
-        self._epno = int(value)
+        self._epno = value
 
     @property
     def airdate(self):

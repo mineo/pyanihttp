@@ -8,13 +8,11 @@ import cache
 import exceptions
 import datetime
 
-from . import CLIENT, CLIENTVERSION
+__all__ = ["search", "query", "QUERY_ANIME", "set_client",
+           "QUERY_CATEGORIES"]# "CLIENT", "CLIENTVERSION"]
 
-__all__ = ("search", "query", "QUERY_ANIME",
-           "QUERY_CATEGORIES")
-
-__version__ = 1
-__title__ = "pyanihttp"
+CLIENT = None
+CLIENTVERSION = None
 
 SEARCH_URL = "http://anisearch.outrance.pl?task=search&query=%s"
 ANIDB_URL = \
@@ -25,6 +23,16 @@ QUERY_ANIME = 1
 
 #: Query type used to retrieve the list of categories
 QUERY_CATEGORIES = 2
+
+def set_client(name, version):
+    """
+    Set the `client` and `clientversion` parameters used in the HTTP request to
+    the AniDB.
+    """
+    global CLIENT
+    global CLIENTVERSION
+    CLIENT = name
+    CLIENTVERSION = version
 
 def search(title, exact=False):
     """
@@ -39,13 +47,14 @@ def search(title, exact=False):
     result = requests.get(SEARCH_URL % title)
     return _handle_response(result)
 
-def query(type=QUERY_ANIME, aid=None):
+def query(type=QUERY_ANIME, aid=None, **kwargs):
     """
     Query AniDB for information about the anime identified by *aid* or the
     complete list of categories.
 
     :param type: Either QUERY_CATEGORIES or QUERY_ANIME
     :param aid: If *type* is QUERY_ANIME, the aid of the anime
+    :param kwargs: Any kwargs you want to pass to :func:`requests.get`
     :raises: ValueError if `anidb.CLIENT` or `anidb.CLIENTVERSION` are not set
     :rtype: :class:`anidb.model.Anime` or a list of
             :class:`anidb.model.Category`
@@ -63,13 +72,13 @@ def query(type=QUERY_ANIME, aid=None):
 
             response = \
                 requests.get(ANIDB_URL % (CLIENT, CLIENTVERSION, "anime")
-                        + "&aid=%i" % aid, proxies={"http": "proxy:3128"})
+                        + "&aid=%i" % aid, **kwargs)
             result =_handle_response(response.content)
             cache.save(aid, result)
             return result
     elif type == QUERY_CATEGORIES:
         response = requests.get(ANIDB_URL % (CLIENT, CLIENTVERSION,
-                                "categorylist"))
+                                "categorylist"), **kwargs)
         return _handle_response(response.content)
 
 def _handle_response(response):
@@ -163,10 +172,7 @@ def parse_category(category):
     """
     result = model.Category(category.attrib["id"])
     for elem in category:
-        if elem.tag == "name":
-            result.name = elem.text
-        elif elem.tag == "description":
-            result.description = elem.text
+        setattr(result, elem.tag, elem.text)
     if category.attrib["hentai"] == "true":
         result.hentai = True
     result.weight = category.attrib["weight"]
@@ -175,8 +181,6 @@ def parse_category(category):
     return result
 
 def parse_episode(episode):
-    """
-    """
     ep = model.Episode(episode.attrib["id"])
     for elem in episode:
         if elem.tag == "length":
@@ -217,10 +221,5 @@ def parse_tag(elem):
     if elem.attrib["spoiler"].lower() == "true":
         t.spoiler = True
     for e in elem:
-        if e.tag == "description":
-            t.description = e.text
-        elif e.tag == "name":
-            t.name = e.text
-        elif e.tag == "count":
-            t.count = e.text
+        setattr(t, e.tag, e.text)
     return t
