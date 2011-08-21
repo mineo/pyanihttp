@@ -2,7 +2,7 @@ import pytest
 import anidb.exceptions
 import datetime
 
-from anidb import query
+from anidb.query import _handle_response
 
 
 def pytest_funcarg__anidb_anime(request):
@@ -39,12 +39,12 @@ def pytest_funcarg__anidb_anime(request):
         </tags>
     </anime>
     """
-    return query._handle_response(xml)
+    return _handle_response(xml)
 
 def test_banned():
     xml = "<error>Banned</error>"
     with pytest.raises(anidb.exceptions.BannedException):
-        query._handle_response(xml)
+        _handle_response(xml)
 
 def test_general(anidb_anime):
     assert anidb_anime.id == 0
@@ -71,7 +71,7 @@ def test_dates(anidb_anime):
 
 def test_episodes(anidb_anime):
     assert len(anidb_anime.episodes) == 1
-    assert 1 in anidb_anime.episodes.keys()
+    assert '1' in anidb_anime.episodes.keys()
 
 def test_tags(anidb_anime):
     assert len(anidb_anime.tags) == 1

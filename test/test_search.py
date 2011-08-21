@@ -1,4 +1,4 @@
-from anidb import query
+from anidb.query import _handle_response
 
 def pytest_funcarg__search_anime(request):
     xml = \
@@ -8,7 +8,7 @@ def pytest_funcarg__search_anime(request):
             <title type="syn" lang="x-jat">SynTitle</title>
     </anime>
     """
-    return query._handle_response(xml)
+    return _handle_response(xml)
 
 def test_search_xml(search_anime):
     assert search_anime.id == 0
