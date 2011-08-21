@@ -45,7 +45,7 @@ def search(title, exact=False):
     if exact:
         title = "\\" + title
     result = requests.get(SEARCH_URL % title)
-    return _handle_response(result)
+    return _handle_response(result.content)
 
 def query(type=QUERY_ANIME, aid=None, **kwargs):
     """
