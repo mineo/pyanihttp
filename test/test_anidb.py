@@ -3,10 +3,10 @@ import anidb.exceptions
 import datetime
 
 from anidb.query import _handle_response
-
+from test.response import Response
 
 def pytest_funcarg__anidb_anime(request):
-    xml = \
+    return _handle_response(Response(
     """<?xml version="1.0" encoding="UTF-8"?>
     <anime id="0" restricted = "false">
         <type>TV Series</type>
@@ -38,11 +38,10 @@ def pytest_funcarg__anidb_anime(request):
             </tag>
         </tags>
     </anime>
-    """
-    return _handle_response(xml)
+    """))
 
 def test_banned():
-    xml = "<error>Banned</error>"
+    xml = Response("<error>Banned</error>")
     with pytest.raises(anidb.exceptions.BannedException):
         _handle_response(xml)
 

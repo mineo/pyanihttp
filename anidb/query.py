@@ -45,7 +45,7 @@ def search(title, exact=False):
     if exact:
         title = "\\" + title
     result = requests.get(SEARCH_URL % title)
-    return _handle_response(result.content)
+    return _handle_response(result)
 
 def query(type=QUERY_ANIME, aid=None, **kwargs):
     """
@@ -73,22 +73,25 @@ def query(type=QUERY_ANIME, aid=None, **kwargs):
             response = \
                 requests.get(ANIDB_URL % (CLIENT, CLIENTVERSION, "anime")
                         + "&aid=%i" % aid, **kwargs)
-            result =_handle_response(response.content)
-            cache.save(aid, result)
+            result =_handle_response(response)
+            cache.save(aid, result.content)
             return result
     elif type == QUERY_CATEGORIES:
         response = requests.get(ANIDB_URL % (CLIENT, CLIENTVERSION,
                                 "categorylist"), **kwargs)
-        return _handle_response(response.content)
+        return _handle_response(response)
     else:
         raise ValueError
         ("type has to be either QUERY_ANIME or QUERY_CATEGORIES, got %s" % type)
 
 def _handle_response(response):
-    if response == "<error>Banned</error>":
+    if response.content == "<error>Banned</error>":
         raise exceptions.BannedException()
+    # TODO raise an exception or something
+    if response.status_code != 200:
+        return None
     # TODO xml: is only used in lang, drop it
-    t =  response.replace("xml:", "")
+    t =  response.content.replace("xml:", "")
     tree = ET.ElementTree(file=StringIO.StringIO(t))
     return parse(tree.getroot())
 
