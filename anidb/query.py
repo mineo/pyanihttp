@@ -80,6 +80,9 @@ def query(type=QUERY_ANIME, aid=None, **kwargs):
         response = requests.get(ANIDB_URL % (CLIENT, CLIENTVERSION,
                                 "categorylist"), **kwargs)
         return _handle_response(response.content)
+    else:
+        raise ValueError
+        ("type has to be either QUERY_ANIME or QUERY_CATEGORIES, got %s" % type)
 
 def _handle_response(response):
     if response == "<error>Banned</error>":
