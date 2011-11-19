@@ -141,16 +141,16 @@ def parse_anime(anime):
         elif elem.tag == "title":
             t = parse_title(elem)
             result.add_title(t)
-        elif elem.tag == "type":
-            result.type = elem.text
+        elif elem.tag in ("type", "episodecount"):
+            setattr(result, elem.tag, elem.text)
+        elif elem.tag == "episodecount":
+            result.episodecount = elem.text
         elif elem.tag == "startdate":
             y, m, d = elem.text.split("-")
             result.startdate = datetime.datetime(int(y), int(m), int(d))
         elif elem.tag == "enddate":
             y, m, d = elem.text.split("-")
             result.enddate = datetime.datetime(int(y), int(m), int(d))
-        elif elem.tag == "episodecount":
-            result.episodecount = elem.text
         elif elem.tag == "ratings":
             for r in elem:
                 result.set_rating(r.tag, r.attrib["count"], float(r.text))
@@ -189,8 +189,8 @@ def parse_category(category):
 def parse_episode(episode):
     ep = model.Episode(episode.attrib["id"])
     for elem in episode:
-        if elem.tag == "length":
-            ep.length = elem.text
+        if elem.tag in ("length", "epno"):
+            setattr(ep, elem.tag, elem.text)
         elif elem.tag == "airdate":
             y, m, d = elem.text.split("-")
             ep.airdate = datetime.datetime(int(y), int(m), int(d))
@@ -199,8 +199,6 @@ def parse_episode(episode):
         elif elem.tag == "title":
             t = parse_title(elem)
             ep.add_title(t)
-        elif elem.tag == "epno":
-            ep.epno = elem.text
     return ep
 
 def parse_title(elem):
