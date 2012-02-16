@@ -299,6 +299,9 @@ class Title(Typed):
         self._title = title
         self._exact = exact
 
+    def __str__(self):
+        return self._title
+
     @property
     def lang(self):
         """
