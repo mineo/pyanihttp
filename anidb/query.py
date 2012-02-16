@@ -74,7 +74,7 @@ def query(type=QUERY_ANIME, aid=None, **kwargs):
                 requests.get(ANIDB_URL % (CLIENT, CLIENTVERSION, "anime")
                         + "&aid=%i" % aid, **kwargs)
             result =_handle_response(response)
-            cache.save(aid, result.content)
+            cache.save(aid, result)
             return result
     elif type == QUERY_CATEGORIES:
         response = requests.get(ANIDB_URL % (CLIENT, CLIENTVERSION,
