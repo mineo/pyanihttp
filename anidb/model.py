@@ -1,5 +1,3 @@
-import types
-
 __all__ = ["Anime", "Category", "Title", "Episode", "Tag"]
 
 class Entity(object):
@@ -269,8 +267,6 @@ class Category(Entity, Named, Described):
 
     @hentai.setter
     def hentai(self, value):
-        if not isinstance(value, types.BooleanType):
-            raise TypeError("Boolean expected")
         self._hentai = value
 
     @property

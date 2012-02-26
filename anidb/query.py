@@ -2,14 +2,16 @@
 # TODO parse characters
 import xml.etree.ElementTree as ET
 import requests
-import StringIO
-import model
-import cache
-import exceptions
+try:
+    import StringIO
+except ImportError:
+    import io as StringIO
 import datetime
 
-__all__ = ["search", "query", "QUERY_ANIME", "set_client",
-           "QUERY_CATEGORIES", "QUERY_RANDOMRECOMMENDATION"]
+from . import model, cache, exceptions
+
+__all__ = ["set_client", "search", "query", "QUERY_ANIME", "QUERY_CATEGORIES",
+            "QUERY_RANDOMRECOMMENDATION", "QUERY_HOT"]
 
 CLIENT = None
 CLIENTVERSION = None
