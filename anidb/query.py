@@ -29,6 +29,9 @@ QUERY_CATEGORIES = 2
 #: Query type to retrieve a random recommendation
 QUERY_RANDOMRECOMMENDATION = 3
 
+#: Query type for hot anime
+QUERY_HOT = 4
+
 def set_client(name, version):
     """
     Set the `client` and `clientversion` parameters used in the HTTP request to
@@ -57,8 +60,7 @@ def query(type=QUERY_ANIME, aid=None, **kwargs):
     Query AniDB for information about the anime identified by *aid* or the
     complete list of categories.
 
-    :param type: Either QUERY_CATEGORIES or QUERY_ANIME or\
-    QUERY_RANDOMRECOMMENDATION
+    :param type: One of QUERY_CATEGORIES, QUERY_ANIME, QUERY_RANDOMRECOMMENDATION, QUERY_HOT
     :param aid: If *type* is QUERY_ANIME, the aid of the anime
     :param kwargs: Any kwargs you want to pass to :func:`requests.get`
     :raises: ValueError if `anidb.CLIENT` or `anidb.CLIENTVERSION` are not set
@@ -80,15 +82,17 @@ def query(type=QUERY_ANIME, aid=None, **kwargs):
             result =_handle_response(response)
             cache.save(aid, result)
             return result
-    elif type == QUERY_CATEGORIES:
-        response = _get("categorylist", **kwargs)
-        return _handle_response(response)
-    elif type == QUERY_RANDOMRECOMMENDATION:
-        response = _get("randomrecommendtion", **kwargs)
-        return _handle_response(response)
     else:
-        raise ValueError
-        ("type has to be either QUERY_ANIME or QUERY_CATEGORIES, got %s" % type)
+        response = None
+        if type == QUERY_CATEGORIES:
+            response = _get("categorylist", **kwargs)
+        elif type == QUERY_RANDOMRECOMMENDATION:
+            response = _get("randomrecommendtion", **kwargs)
+        elif type == QUERY_HOT:
+            response = _get("hotanime", **kwargs)
+        else:
+            raise ValueError("unknown query type")
+        return _handle_response(response)
 
 def _get(request, **kwargs):
     return requests.get(ANIDB_URL % (CLIENT, CLIENTVERSION, request), **kwargs)
@@ -108,21 +112,20 @@ def parse(tree):
     """
     Parse all the elements in an :class:`xml.etree.ElementTree.Element`
     """
-    if tree.tag == "animetitles":
-        result = []
-        for elem in tree:
-            t = parse(elem)
-            result.append(t)
-        return result
-    elif tree.tag == "anime":
+    if tree.tag in ("animetitles", "randomrecommendation", "hotanime"):
+        return parse_list(tree)
+    elif tree.tag in "anime":
         return parse_element(tree)
-    elif tree.tag == "randomrecommendation":
-        result = []
-        for elem in tree:
-            t = parse_anime(elem[0])
-            result.append(t)
-        return result
+    elif tree.tag == "recommendation":
+        return parse_anime(tree[0])
     # TODO categorylist
+
+def parse_list(tree):
+    result = []
+    for elem in tree:
+        t = parse(elem)
+        result.append(t)
+    return result
 
 def parse_element(elem):
     """docstring for parse_element"""
