@@ -141,16 +141,10 @@ def parse_anime(anime):
         elif elem.tag == "title":
             t = parse_title(elem)
             result.add_title(t)
-        elif elem.tag in ("type", "episodecount"):
+        elif elem.tag in ("type", "episodecount", "startdate", "enddate"):
             setattr(result, elem.tag, elem.text)
         elif elem.tag == "episodecount":
             result.episodecount = elem.text
-        elif elem.tag == "startdate":
-            y, m, d = elem.text.split("-")
-            result.startdate = datetime.datetime(int(y), int(m), int(d))
-        elif elem.tag == "enddate":
-            y, m, d = elem.text.split("-")
-            result.enddate = datetime.datetime(int(y), int(m), int(d))
         elif elem.tag == "ratings":
             for r in elem:
                 result.set_rating(r.tag, r.attrib["count"], float(r.text))

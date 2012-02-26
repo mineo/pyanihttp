@@ -1,6 +1,5 @@
 import pytest
 import anidb.exceptions
-import datetime
 
 from anidb.query import _handle_response
 from test.response import Response
@@ -62,11 +61,8 @@ def test_categories(anidb_anime):
     assert anidb_anime.categories[0].hentai
 
 def test_dates(anidb_anime):
-    startdate = datetime.datetime(1990,1,1)
-    enddate = datetime.datetime(1990,1,2)
-
-    assert startdate == anidb_anime.startdate
-    assert enddate == anidb_anime.enddate
+    assert "1990-01-01" == anidb_anime.startdate
+    assert "1990-01-02" == anidb_anime.enddate
 
 def test_episodes(anidb_anime):
     assert len(anidb_anime.episodes) == 1
