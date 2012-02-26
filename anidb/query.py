@@ -70,19 +70,21 @@ def query(type=QUERY_ANIME, aid=None, **kwargs):
             if cacheresult is not None:
                 return cacheresult
 
-            response = \
-                requests.get(ANIDB_URL % (CLIENT, CLIENTVERSION, "anime")
-                        + "&aid=%i" % aid, **kwargs)
+            response = _get("anime", params={"aid": aid}, **kwargs)
             result =_handle_response(response)
             cache.save(aid, result)
             return result
     elif type == QUERY_CATEGORIES:
-        response = requests.get(ANIDB_URL % (CLIENT, CLIENTVERSION,
-                                "categorylist"), **kwargs)
+        response = _get("categorylist", **kwargs)
         return _handle_response(response)
+    elif type == QUERY_RANDOMRECOMMENDATION:
+        response = _get("randomrecommendtion", **kwargs)
     else:
         raise ValueError
         ("type has to be either QUERY_ANIME or QUERY_CATEGORIES, got %s" % type)
+
+def _get(request, **kwargs):
+    return requests.get(ANIDB_URL % (CLIENT, CLIENTVERSION, request), **kwargs)
 
 def _handle_response(response):
     if response.content == "<error>Banned</error>":
