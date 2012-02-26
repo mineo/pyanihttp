@@ -9,7 +9,7 @@ import exceptions
 import datetime
 
 __all__ = ["search", "query", "QUERY_ANIME", "set_client",
-           "QUERY_CATEGORIES"]# "CLIENT", "CLIENTVERSION"]
+           "QUERY_CATEGORIES", "QUERY_RANDOMRECOMMENDATION"]
 
 CLIENT = None
 CLIENTVERSION = None
@@ -23,6 +23,9 @@ QUERY_ANIME = 1
 
 #: Query type used to retrieve the list of categories
 QUERY_CATEGORIES = 2
+
+#: Query type to retrieve a random recommendation
+QUERY_RANDOMRECOMMENDATION = 3
 
 def set_client(name, version):
     """
@@ -52,7 +55,8 @@ def query(type=QUERY_ANIME, aid=None, **kwargs):
     Query AniDB for information about the anime identified by *aid* or the
     complete list of categories.
 
-    :param type: Either QUERY_CATEGORIES or QUERY_ANIME
+    :param type: Either QUERY_CATEGORIES or QUERY_ANIME or\
+    QUERY_RANDOMRECOMMENDATION
     :param aid: If *type* is QUERY_ANIME, the aid of the anime
     :param kwargs: Any kwargs you want to pass to :func:`requests.get`
     :raises: ValueError if `anidb.CLIENT` or `anidb.CLIENTVERSION` are not set
@@ -79,6 +83,7 @@ def query(type=QUERY_ANIME, aid=None, **kwargs):
         return _handle_response(response)
     elif type == QUERY_RANDOMRECOMMENDATION:
         response = _get("randomrecommendtion", **kwargs)
+        return _handle_response(response)
     else:
         raise ValueError
         ("type has to be either QUERY_ANIME or QUERY_CATEGORIES, got %s" % type)
@@ -109,6 +114,12 @@ def parse(tree):
         return result
     elif tree.tag == "anime":
         return parse_element(tree)
+    elif tree.tag == "randomrecommendation":
+        result = []
+        for elem in tree:
+            t = parse_anime(elem[0])
+            result.append(t)
+        return result
     # TODO categorylist
 
 def parse_element(elem):
@@ -149,7 +160,8 @@ def parse_anime(anime):
             result.episodecount = elem.text
         elif elem.tag == "ratings":
             for r in elem:
-                result.set_rating(r.tag, r.attrib["count"], float(r.text))
+                if r.tag in ("permanent", "temporary", "review"):
+                    result.set_rating(r.tag, r.attrib["count"], float(r.text))
         elif elem.tag == "categories":
             for c in parse_categorylist(elem):
                 result.add_category(c)
